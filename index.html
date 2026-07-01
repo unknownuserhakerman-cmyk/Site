@@ -9,28 +9,135 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: #0a0a0f;
+            background: #080810;
             color: #d0c0e8;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* simple background */
-        .bg {
+        /* ===== GALAXY BACKGROUND ===== */
+        .galaxy {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
-            background: 
-                radial-gradient(ellipse at 20% 50%, rgba(100, 0, 200, 0.06) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 50%, rgba(120, 0, 200, 0.04) 0%, transparent 60%);
+            overflow: hidden;
+            background: radial-gradient(ellipse at 30% 20%, rgba(40, 10, 80, 0.3) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(20, 5, 60, 0.2) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(10, 5, 30, 0.5) 0%, transparent 70%);
         }
 
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* moon */
+        .moon {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #f0e6d0, #c8b898 40%, #8a7a6a 70%, #4a3a3a);
+            top: 8%;
+            right: 12%;
+            box-shadow: 0 0 60px rgba(200, 180, 140, 0.15), 0 0 120px rgba(200, 180, 140, 0.05);
+            animation: moon-float 20s ease-in-out infinite alternate;
+        }
+
+        .moon::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(120, 100, 80, 0.3);
+            top: 25px;
+            left: 30px;
+        }
+
+        .moon::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(120, 100, 80, 0.2);
+            top: 60px;
+            left: 55px;
+        }
+
+        @keyframes moon-float {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(15px, 10px); }
+            100% { transform: translate(-10px, 15px); }
+        }
+
+        /* small shooting star line */
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.3);
+            animation: shoot 8s linear infinite;
+            top: 15%;
+            left: 80%;
+        }
+
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(to left, rgba(255,255,255,0.4), transparent);
+            transform: rotate(-35deg);
+            transform-origin: right center;
+        }
+
+        @keyframes shoot {
+            0% { transform: translate(0, 0); opacity: 0; }
+            5% { opacity: 1; }
+            15% { transform: translate(-200px, 140px); opacity: 0; }
+            100% { transform: translate(-200px, 140px); opacity: 0; }
+        }
+
+        .shooting-star:nth-child(2) {
+            top: 60%;
+            left: 20%;
+            animation-delay: 4s;
+            animation-duration: 10s;
+        }
+
+        .shooting-star:nth-child(2)::after {
+            width: 60px;
+        }
+
+        /* ===== NAVBAR ===== */
         .navbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 12px 30px;
-            background: rgba(8, 8, 18, 0.9);
-            border-bottom: 1px solid rgba(168, 85, 247, 0.1);
+            background: rgba(6, 6, 16, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(168, 85, 247, 0.08);
             position: fixed;
             top: 0; left: 0; width: 100%;
             z-index: 100;
@@ -90,6 +197,7 @@
             background: rgba(168, 85, 247, 0.08);
         }
 
+        /* ===== PAGES ===== */
         .page {
             display: none;
             padding: 85px 16px 40px;
@@ -159,7 +267,7 @@
             box-shadow: none;
         }
 
-        /* ===== HOME PAGE - DOXXER FOCUS ===== */
+        /* ===== HOME - DOXXER FOCUS ===== */
         .doxxer-showcase {
             background: linear-gradient(145deg, rgba(20, 12, 40, 0.7), rgba(10, 5, 22, 0.85));
             border: 1px solid rgba(168, 85, 247, 0.1);
@@ -211,7 +319,7 @@
             margin-top: 20px;
         }
 
-        /* ===== FEATURES PAGE ===== */
+        /* ===== FEATURES ===== */
         .product-section {
             margin-top: 25px;
         }
@@ -305,7 +413,7 @@
             margin: 30px 0;
         }
 
-        /* ===== VOUCHES PAGE ===== */
+        /* ===== VOUCHES ===== */
         .vouch-box {
             background: rgba(12, 10, 22, 0.5);
             border: 1px solid rgba(168, 85, 247, 0.06);
@@ -425,12 +533,21 @@
             .hero h1 { font-size: 1.6rem; }
             .page { padding: 75px 10px 30px; }
             .vouch-time { display: none; }
+            .moon { width: 80px; height: 80px; top: 5%; right: 8%; }
+            .moon::before { width: 20px; height: 20px; top: 18px; left: 20px; }
+            .moon::after { width: 12px; height: 12px; top: 40px; left: 38px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg"></div>
+    <!-- ===== GALAXY BACKGROUND ===== -->
+    <div class="galaxy">
+        <div class="stars" id="stars"></div>
+        <div class="moon"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+    </div>
 
     <nav class="navbar">
         <div class="nav-logo">
@@ -477,7 +594,7 @@
         </div>
     </div>
 
-    <!-- ===== FEATURES = BOTH PRODUCTS ===== -->
+    <!-- ===== FEATURES ===== -->
     <div class="page" id="page-features">
         <div class="hero">
             <h1>⚙️ FEATURES</h1>
@@ -542,82 +659,4 @@
                         <li>500+ premium scripts</li>
                         <li>Instant auto-update</li>
                         <li>No key system</li>
-                        <li>HWID spoofing</li>
-                        <li>Priority 24/7 support</li>
-                    </ul>
-                    <a href="https://discord.com/invite/bZFGVUBvya" target="_blank" class="btn">Join our Discord</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="discord-foot">
-            <p>All purchases handled through our Discord</p>
-            <a href="https://discord.com/invite/bZFGVUBvya" target="_blank" class="btn">Join our Discord to buy</a>
-        </div>
-    </div>
-
-    <!-- ===== VOUCHES = ONLY DOXXER + GENERAL, NO EXECUTOR ===== -->
-    <div class="page" id="page-vouches">
-        <div class="hero">
-            <h1>💬 VOUCHES</h1>
-            <p>What our community says</p>
-        </div>
-
-        <div class="vouch-box">
-
-            <div class="vouch">
-                <div class="vouch-av" style="background:linear-gradient(135deg,#5865F2,#4752C4);">K</div>
-                <div class="vouch-body">
-                    <div class="vouch-head">
-                        <span class="vouch-name">Kraken</span>
-                        <span class="vouch-tag">Premium</span>
-                        <span class="vouch-time">Today at 3:42 PM</span>
-                    </div>
-                    <div class="vouch-text"><span class="hl">vouch yoda</span> — insane tool, got everything I needed in under 2 minutes. this team is legit 🔥</div>
-                </div>
-            </div>
-
-            <div class="vouch-line"></div>
-
-            <div class="vouch">
-                <div class="vouch-av" style="background:linear-gradient(135deg,#22c55e,#16a34a);">Z</div>
-                <div class="vouch-body">
-                    <div class="vouch-head">
-                        <span class="vouch-name">ZeroDay</span>
-                        <span class="vouch-time">Today at 2:55 PM</span>
-                    </div>
-                    <div class="vouch-text"><span class="hl">thanks for the doxxer</span> — pulled full info on a scammer in seconds. support walked me through everything. absolute W</div>
-                </div>
-            </div>
-
-            <div class="vouch-line"></div>
-
-            <div class="vouch">
-                <div class="vouch-av" style="background:linear-gradient(135deg,#a855f7,#7c3aed);">R</div>
-                <div class="vouch-body">
-                    <div class="vouch-head">
-                        <span class="vouch-name">RazorX</span>
-                        <span class="vouch-tag">Premium</span>
-                        <span class="vouch-time">Today at 1:30 PM</span>
-                    </div>
-                    <div class="vouch-text"><span class="hl">vouch yoda doxxer</span> — phone, email, address, socials all in one search. support team is super responsive too. join the discord</div>
-                </div>
-            </div>
-
-            <div class="vouch-line"></div>
-
-            <div class="vouch">
-                <div class="vouch-av" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">S</div>
-                <div class="vouch-body">
-                    <div class="vouch-head">
-                        <span class="vouch-name">ShadowViper</span>
-                        <span class="vouch-time">Today at 12:45 PM</span>
-                    </div>
-                    <div class="vouch-text"><span class="hl">yoda city is goated</span> — bought both tools. doxxer is insane for osint. this place is my one stop shop now</div>
-                </div>
-            </div>
-
-            <div class="vouch-line"></div>
-
-            <div class="vouch">
-                <div class="vouch-
+    
