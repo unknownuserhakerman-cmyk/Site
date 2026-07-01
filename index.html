@@ -6,518 +6,618 @@
     <title>Yoda City</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
         body {
-            font-family: 'Inter', 'Rajdhani', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             background: #0a0a0f;
-            color: #e0d0ff;
+            color: #d0c0e8;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        .bg-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background:
-                radial-gradient(ellipse at 15% 50%, rgba(120, 0, 255, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 85% 50%, rgba(180, 0, 255, 0.06) 0%, transparent 60%),
-                radial-gradient(ellipse at 50% 0%, rgba(90, 0, 200, 0.1) 0%, transparent 50%);
-        }
-
-        .bg-particles {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden;
-        }
-
-        .particle {
-            position: absolute; width: 3px; height: 3px; background: #a855f7;
-            border-radius: 50%; box-shadow: 0 0 8px #a855f7, 0 0 15px #7c3aed;
-            animation: float linear infinite; opacity: 0;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(105vh) scale(0); opacity: 0; }
-            15% { opacity: 0.7; }
-            85% { opacity: 0.7; }
-            100% { transform: translateY(-5vh) scale(1.2); opacity: 0; }
-        }
-
-        .grid-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background-image:
-                linear-gradient(rgba(168, 85, 247, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(168, 85, 247, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
+        /* simple background */
+        .bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(100, 0, 200, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(120, 0, 200, 0.04) 0%, transparent 60%);
         }
 
         .navbar {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 14px 40px;
-            background: rgba(8, 8, 18, 0.92);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(168, 85, 247, 0.12);
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
-            box-shadow: 0 4px 30px rgba(120, 0, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 30px;
+            background: rgba(8, 8, 18, 0.9);
+            border-bottom: 1px solid rgba(168, 85, 247, 0.1);
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 100;
         }
 
-        .nav-logo { display: flex; align-items: center; gap: 14px; }
-
-        .nav-logo .logo-icon {
-            width: 42px; height: 42px; border-radius: 50%;
-            background: linear-gradient(135deg, #7c3aed, #a855f7);
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.4rem; color: #fff;
-            box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
-            animation: glow-pulse 2.5s ease-in-out infinite; flex-shrink: 0;
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        @keyframes glow-pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
-            50% { box-shadow: 0 0 50px rgba(168, 85, 247, 0.6); }
+        .nav-logo .logo {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6d28d9, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: #fff;
+            font-family: 'Arial Black', Arial, sans-serif;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+            flex-shrink: 0;
         }
 
         .nav-logo span {
-            font-family: 'Orbitron', sans-serif; font-size: 1.4rem; font-weight: 900;
-            background: linear-gradient(135deg, #c084fc, #a855f7, #7c3aed);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .nav-links { display: flex; gap: 8px; list-style: none; align-items: center; }
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            list-style: none;
+        }
 
         .nav-links a {
-            text-decoration: none; color: #9a85b8; font-size: 0.95rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 1.5px; padding: 8px 18px;
-            border-radius: 10px; transition: all 0.3s ease;
+            text-decoration: none;
+            color: #9a85b8;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
-        .nav-links a:hover, .nav-links a.active {
-            color: #c084fc; background: rgba(168, 85, 247, 0.08);
-            text-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
-        }
-
+        .nav-links a:hover,
         .nav-links a.active {
-            background: rgba(168, 85, 247, 0.12);
-            box-shadow: inset 0 0 20px rgba(168, 85, 247, 0.05);
+            color: #c084fc;
+            background: rgba(168, 85, 247, 0.08);
         }
 
-        .page { display: none; padding: 100px 20px 60px; max-width: 1000px; margin: 0 auto; animation: fadeInPage 0.5s ease; }
+        .page {
+            display: none;
+            padding: 85px 16px 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 0.3s ease;
+        }
+
         .page.active { display: block; }
 
-        @keyframes fadeInPage {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .hero { text-align: center; padding: 30px 0 20px; }
+        .hero {
+            text-align: center;
+            padding: 25px 0 15px;
+        }
 
         .hero h1 {
-            font-family: 'Orbitron', sans-serif; font-size: 2.8rem; font-weight: 900;
-            background: linear-gradient(135deg, #d8b4fe, #a855f7, #7c3aed);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
-            animation: title-glow 3s ease-in-out infinite;
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #d8b4fe, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        @keyframes title-glow {
-            0%, 100% { filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.3)); }
-            50% { filter: drop-shadow(0 0 50px rgba(168, 85, 247, 0.6)); }
+        .hero p {
+            color: #9a85b8;
+            font-size: 0.95rem;
+            margin-top: 6px;
         }
-
-        .hero p { color: #9a85b8; font-size: 1.1rem; margin-top: 8px; letter-spacing: 1.5px; }
 
         .btn {
             display: inline-block;
-            padding: 12px 35px;
-            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            padding: 10px 28px;
+            background: linear-gradient(135deg, #6d28d9, #a855f7);
             color: #fff;
-            font-family: 'Orbitron', sans-serif;
             font-weight: 700;
             font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
             text-decoration: none;
-            box-shadow: 0 4px 20px rgba(120, 0, 255, 0.3);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(120, 0, 255, 0.2);
         }
-
-        .btn::before {
-            content: '';
-            position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn:hover::before { left: 100%; }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 35px rgba(120, 0, 255, 0.45);
+            box-shadow: 0 6px 25px rgba(120, 0, 255, 0.35);
         }
 
         .btn-coming {
             background: rgba(60, 40, 90, 0.3);
-            border: 2px solid rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.2);
             box-shadow: none;
             cursor: default;
             opacity: 0.6;
         }
 
-        .btn-coming:hover { transform: none; box-shadow: none; }
+        .btn-coming:hover {
+            transform: none;
+            box-shadow: none;
+        }
 
-        /* ===== DISCORD-STYLE VOUCHES (HOME PAGE) ===== */
-        .vouches-header {
+        /* ===== HOME PAGE - DOXXER FOCUS ===== */
+        .doxxer-showcase {
+            background: linear-gradient(145deg, rgba(20, 12, 40, 0.7), rgba(10, 5, 22, 0.85));
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 30px 25px;
             text-align: center;
-            margin-bottom: 25px;
+            margin-top: 20px;
         }
 
-        .vouches-header .live-indicator {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            padding: 5px 16px; border-radius: 50px;
-            color: #22c55e; font-size: 0.75rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 1px;
+        .doxxer-showcase .big-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
         }
 
-        .vouches-header .live-indicator .dot {
-            width: 8px; height: 8px; background: #22c55e; border-radius: 50%;
-            animation: live-pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes live-pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 6px #22c55e; }
-            50% { opacity: 0.4; box-shadow: 0 0 12px #22c55e; }
-        }
-
-        .vouch-discord {
-            background: rgba(15, 12, 30, 0.6);
-            border: 1px solid rgba(168, 85, 247, 0.08);
-            border-radius: 12px;
-            padding: 10px 0;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .vouch-message {
-            display: flex;
-            padding: 10px 20px;
-            gap: 14px;
-            transition: background 0.2s ease;
-            border-radius: 8px;
-            margin: 2px 8px;
-        }
-
-        .vouch-message:hover { background: rgba(168, 85, 247, 0.04); }
-
-        .vouch-avatar {
-            width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 0.8rem; color: #fff; margin-top: 2px;
-        }
-
-        .vouch-body { flex: 1; min-width: 0; }
-
-        .vouch-header {
-            display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 2px;
-        }
-
-        .vouch-username {
-            font-weight: 700; font-size: 0.9rem; color: #e0d0ff;
-        }
-
-        .vouch-badge {
-            font-size: 0.65rem; background: rgba(168, 85, 247, 0.15);
-            color: #a855f7; padding: 1px 8px; border-radius: 4px;
-            font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-
-        .vouch-badge.green { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
-        .vouch-badge.gold { background: rgba(234, 179, 8, 0.15); color: #eab308; }
-        .vouch-badge.pink { background: rgba(236, 72, 153, 0.15); color: #ec4899; }
-        .vouch-badge.blue { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
-
-        .vouch-timestamp {
-            font-size: 0.65rem; color: #5a4a6a; margin-left: auto; white-space: nowrap;
-        }
-
-        .vouch-text {
-            color: #c8b8e0; font-size: 0.9rem; line-height: 1.5; word-wrap: break-word;
-        }
-
-        .vouch-text .highlight { color: #a855f7; font-weight: 600; }
-
-        .vouch-separator { height: 1px; background: rgba(168, 85, 247, 0.05); margin: 2px 20px; }
-
-        .discord-cta-home {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .discord-cta-home p {
-            color: #9a85b8;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-        }
-
-        /* ===== PRODUCT CARDS (Pages 2 & 3) ===== */
-        .product-section {
-            margin-top: 30px;
-        }
-
-        .product-section .section-title {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .product-section .section-title h2 {
-            font-family: 'Orbitron', sans-serif;
+        .doxxer-showcase h2 {
+            font-family: 'Arial Black', Arial, sans-serif;
             font-size: 1.5rem;
             color: #c084fc;
-            text-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
         }
 
-        .product-section .section-title p {
+        .doxxer-showcase .tagline {
             color: #9a85b8;
             font-size: 0.9rem;
-            margin-top: 4px;
+            margin: 6px 0 15px;
+        }
+
+        .doxxer-showcase .feat-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .doxxer-showcase .feat-list span {
+            background: rgba(168, 85, 247, 0.06);
+            border: 1px solid rgba(168, 85, 247, 0.08);
+            padding: 5px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: #b8a0d8;
+        }
+
+        .join-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* ===== FEATURES PAGE ===== */
+        .product-section {
+            margin-top: 25px;
+        }
+
+        .product-section h2 {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.2rem;
+            color: #c084fc;
+            text-align: center;
+            margin-bottom: 15px;
         }
 
         .product-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 30px;
+            gap: 20px;
             justify-content: center;
         }
 
         .product-card {
-            flex: 1 1 280px;
-            max-width: 360px;
-            background: linear-gradient(145deg, rgba(25, 15, 45, 0.8), rgba(10, 5, 25, 0.9));
-            border: 1px solid rgba(168, 85, 247, 0.1);
-            border-radius: 18px;
-            padding: 30px 25px;
+            flex: 1 1 260px;
+            max-width: 340px;
+            background: linear-gradient(145deg, rgba(20, 12, 40, 0.7), rgba(10, 5, 22, 0.85));
+            border: 1px solid rgba(168, 85, 247, 0.08);
+            border-radius: 14px;
+            padding: 24px 20px;
             text-align: center;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
         }
-
-        .product-card::before {
-            content: '';
-            position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
-            border-radius: 19px;
-            background: conic-gradient(#a855f7, #7c3aed, #4c1d95, #a855f7);
-            z-index: -1; opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .product-card:hover::before { opacity: 0.3; }
 
         .product-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 15px 45px rgba(120, 0, 255, 0.2);
-            border-color: rgba(168, 85, 247, 0.3);
+            border-color: rgba(168, 85, 247, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(120, 0, 255, 0.1);
         }
 
-        .product-card .icon-big { font-size: 2.6rem; margin-bottom: 10px; filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.3)); }
+        .product-card .icon-big {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
 
         .product-card h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.1rem;
             color: #c084fc;
-            text-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
         }
 
         .product-card .p-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #7c3aed, #a855f7);
-            color: #fff; font-size: 0.6rem; font-weight: 700;
-            padding: 3px 14px; border-radius: 20px;
-            text-transform: uppercase; letter-spacing: 1.5px;
-            margin: 8px 0 15px;
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+            background: linear-gradient(135deg, #6d28d9, #a855f7);
+            color: #fff;
+            font-size: 0.55rem;
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 6px 0 12px;
         }
 
         .product-card .p-badge.soon {
-            background: rgba(60, 40, 90, 0.4);
+            background: rgba(60, 40, 90, 0.3);
             color: #9a85b8;
-            box-shadow: none;
             border: 1px solid rgba(168, 85, 247, 0.15);
         }
 
         .product-card ul {
             list-style: none;
-            margin: 15px 0 20px;
+            margin: 12px 0 16px;
             text-align: left;
         }
 
         .product-card ul li {
             color: #b8a0d8;
-            padding: 7px 0;
-            font-size: 0.85rem;
+            padding: 5px 0;
+            font-size: 0.8rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .product-card ul li::before {
             content: '✓';
             color: #a855f7;
             font-weight: bold;
-            text-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
         }
 
-        .discord-section {
-            text-align: center; margin-top: 50px; padding: 35px;
-            background: rgba(20, 10, 40, 0.4);
-            border: 1px solid rgba(168, 85, 247, 0.08);
-            border-radius: 20px; backdrop-filter: blur(10px);
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.12), transparent);
+            margin: 30px 0;
         }
 
-        .discord-section .d-icon {
-            width: 70px; height: 70px; border-radius: 50%;
-            background: linear-gradient(135deg, #5865F2, #7c3aed);
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 15px; font-size: 2rem;
-            box-shadow: 0 0 35px rgba(88, 101, 242, 0.4);
-            animation: glow-pulse 2.5s ease-in-out infinite;
+        /* ===== VOUCHES PAGE ===== */
+        .vouch-box {
+            background: rgba(12, 10, 22, 0.5);
+            border: 1px solid rgba(168, 85, 247, 0.06);
+            border-radius: 10px;
+            padding: 6px 0;
         }
 
-        .discord-section h3 {
-            font-family: 'Orbitron', sans-serif; color: #c084fc; font-size: 1.2rem; margin-bottom: 8px;
+        .vouch {
+            display: flex;
+            padding: 10px 16px;
+            gap: 12px;
+            border-radius: 6px;
+            margin: 2px 6px;
+            transition: background 0.15s ease;
         }
 
-        .discord-section p { color: #9a85b8; font-size: 0.9rem; margin-bottom: 18px; }
+        .vouch:hover {
+            background: rgba(168, 85, 247, 0.03);
+        }
+
+        .vouch-av {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: #fff;
+            margin-top: 2px;
+        }
+
+        .vouch-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .vouch-head {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 1px;
+        }
+
+        .vouch-name {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #d0c0e8;
+        }
+
+        .vouch-tag {
+            font-size: 0.6rem;
+            background: rgba(168, 85, 247, 0.12);
+            color: #a855f7;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .vouch-time {
+            font-size: 0.6rem;
+            color: #5a4a6a;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        .vouch-text {
+            color: #c0b0d8;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .vouch-text .hl {
+            color: #a855f7;
+            font-weight: 600;
+        }
+
+        .vouch-line {
+            height: 1px;
+            background: rgba(168, 85, 247, 0.04);
+            margin: 2px 16px;
+        }
+
+        .discord-foot {
+            text-align: center;
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(20, 10, 40, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.06);
+            border-radius: 14px;
+        }
+
+        .discord-foot p {
+            color: #9a85b8;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
 
         footer {
-            text-align: center; padding: 25px; color: #4a3a5a;
-            font-size: 0.8rem; border-top: 1px solid rgba(168, 85, 247, 0.04); margin-top: 30px;
+            text-align: center;
+            padding: 20px;
+            color: #4a3a5a;
+            font-size: 0.75rem;
+            border-top: 1px solid rgba(168, 85, 247, 0.03);
+            margin-top: 20px;
         }
 
-        @media (max-width: 768px) {
-            .navbar { padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
-            .nav-logo span { font-size: 1.1rem; }
-            .nav-links { gap: 4px; flex-wrap: wrap; justify-content: center; width: 100%; }
-            .nav-links a { font-size: 0.75rem; padding: 6px 12px; letter-spacing: 1px; }
-            .hero h1 { font-size: 2rem; }
-            .page { padding: 120px 12px 40px; }
-            .vouch-message { padding: 8px 14px; }
-            .vouch-timestamp { display: none; }
+        @media (max-width: 600px) {
+            .navbar { padding: 10px 14px; }
+            .nav-logo span { font-size: 1rem; }
+            .nav-links a { font-size: 0.75rem; padding: 5px 10px; }
+            .hero h1 { font-size: 1.6rem; }
+            .page { padding: 75px 10px 30px; }
+            .vouch-time { display: none; }
         }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0a0a0f; }
-        ::-webkit-scrollbar-thumb { background: #3a2a5a; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #5a3a7a; }
     </style>
 </head>
 <body>
 
-    <div class="bg-overlay"></div>
-    <div class="grid-bg"></div>
-    <div class="bg-particles" id="particles"></div>
+    <div class="bg"></div>
 
     <nav class="navbar">
         <div class="nav-logo">
-            <div class="logo-icon">Y</div>
+            <div class="logo">Y</div>
             <span>YODA CITY</span>
         </div>
         <ul class="nav-links">
             <li><a href="#" class="active" data-page="home">Home</a></li>
-            <li><a href="#" data-page="doxxer">Yoda Doxxer</a></li>
-            <li><a href="#" data-page="executor">Executor</a></li>
+            <li><a href="#" data-page="features">Features</a></li>
+            <li><a href="#" data-page="vouches">Vouches</a></li>
         </ul>
     </nav>
 
-    <!-- ===== PAGE 1: HOME (VOUCHES) ===== -->
+    <!-- ===== HOME = DOXXER PAGE ===== -->
     <div class="page active" id="page-home">
         <div class="hero">
             <h1>✦ YODA CITY ✦</h1>
-            <p>Trusted by the community</p>
+            <p>Premium intelligence tools</p>
         </div>
 
-        <div class="vouches-header">
-            <div class="live-indicator">
-                <span class="dot"></span> Live — people are talking
+        <div class="doxxer-showcase">
+            <div class="big-icon">🔍</div>
+            <h2>Yoda Doxxer</h2>
+            <p class="tagline">The most advanced OSINT platform on the market</p>
+            <div class="feat-list">
+                <span>📍 IP Lookup</span>
+                <span>📧 Email Search</span>
+                <span>📱 Phone Lookup</span>
+                <span>🏠 Address Finder</span>
+                <span>🌐 Social Cross-Ref</span>
+                <span>🕶️ Dark Web Scan</span>
+            </div>
+            <p style="color:#b8a0d8; font-size:0.85rem; margin-bottom:15px;">
+                Full intelligence suite used by hundreds. Unlimited searches, real-time results, priority support.
+            </p>
+            <div class="join-row">
+                <a href="https://discord.com/invite/bZFGVUBvya" target="_blank" class="btn">Join our Discord to buy</a>
             </div>
         </div>
 
-        <div class="vouch-discord">
+        <div class="discord-foot" style="margin-top:25px;">
+            <p>Get Yoda Doxxer and more — all purchases through Discord</p>
+            <a href="https://discord.com/invite/bZFGVUBvya" target="_blank" class="btn">Join Discord Server</a>
+        </div>
+    </div>
 
-            <div class="vouch-message">
-                <div class="vouch-avatar" style="background:linear-gradient(135deg,#5865F2,#4752C4);">K</div>
+    <!-- ===== FEATURES = BOTH PRODUCTS ===== -->
+    <div class="page" id="page-features">
+        <div class="hero">
+            <h1>⚙️ FEATURES</h1>
+            <p>Our full product lineup</p>
+        </div>
+
+        <div class="product-section">
+            <h2>🔍 Yoda Doxxer</h2>
+            <div class="product-row">
+                <div class="product-card">
+                    <div class="icon-big">🆓</div>
+                    <h3>Free</h3>
+                    <div class="p-badge soon">COMING SOON</div>
+                    <ul>
+                        <li>Basic IP lookup</li>
+                        <li>Username search (3/day)</li>
+                        <li>Email verification</li>
+                        <li>Community support</li>
+                    </ul>
+                    <a href="https://discord.com/invite/bZFGVUBvya" target="_blank" class="btn">Join our Discord</a>
+                </div>
+                <div class="product-card">
+                    <div class="icon-big">💎</div>
+                    <h3>Premium</h3>
+                    <div class="p-badge">Most Popular</div>
+                    <ul>
+                        <li>Full OSINT suite</li>
+                        <li>Unlimited searches</li>
+                        <li>Phone & address lookup</li>
+                        <li>Social media cross-ref</li>
+                        <li>Dark web scanning</li>
+                        <li>Priority 24/7 support</li>
+                    </ul>
+                    <a href="https://discord.com/invite/bZFGVUBvya" target="_blank" class="btn">Join our Discord</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="product-section">
+            <h2>⚡ Roblox Executor</h2>
+            <div class="product-row">
+                <div class="product-card">
+                    <div class="icon-big">🆓</div>
+                    <h3>Free</h3>
+                    <div class="p-badge soon">COMING SOON</div>
+                    <ul>
+                        <li>Basic script execution</li>
+                        <li>20+ pre-loaded scripts</li>
+                        <li>Manual auto-update</li>
+                        <li>Standard key system</li>
+                    </ul>
+                    <a href="https://discord.com/invite/bZFGVUBvya" target="_blank" class="btn">Join our Discord</a>
+                </div>
+                <div class="product-card">
+                    <div class="icon-big">💎</div>
+                    <h3>Premium</h3>
+                    <div class="p-badge">Best Seller</div>
+                    <ul>
+                        <li>Unlimited script execution</li>
+                        <li>500+ premium scripts</li>
+                        <li>Instant auto-update</li>
+                        <li>No key system</li>
+                        <li>HWID spoofing</li>
+                        <li>Priority 24/7 support</li>
+                    </ul>
+                    <a href="https://discord.com/invite/bZFGVUBvya" target="_blank" class="btn">Join our Discord</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="discord-foot">
+            <p>All purchases handled through our Discord</p>
+            <a href="https://discord.com/invite/bZFGVUBvya" target="_blank" class="btn">Join our Discord to buy</a>
+        </div>
+    </div>
+
+    <!-- ===== VOUCHES = ONLY DOXXER + GENERAL, NO EXECUTOR ===== -->
+    <div class="page" id="page-vouches">
+        <div class="hero">
+            <h1>💬 VOUCHES</h1>
+            <p>What our community says</p>
+        </div>
+
+        <div class="vouch-box">
+
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#5865F2,#4752C4);">K</div>
                 <div class="vouch-body">
-                    <div class="vouch-header">
-                        <span class="vouch-username">Kraken</span>
-                        <span class="vouch-badge blue">VIP</span>
-                        <span class="vouch-timestamp">Today at 3:42 PM</span>
+                    <div class="vouch-head">
+                        <span class="vouch-name">Kraken</span>
+                        <span class="vouch-tag">Premium</span>
+                        <span class="vouch-time">Today at 3:42 PM</span>
                     </div>
-                    <div class="vouch-text"><span class="highlight">vouch yoda</span> — insane tool, got everything I needed in under 2 minutes. this team is legit 🔥</div>
+                    <div class="vouch-text"><span class="hl">vouch yoda</span> — insane tool, got everything I needed in under 2 minutes. this team is legit 🔥</div>
                 </div>
             </div>
 
-            <div class="vouch-separator"></div>
+            <div class="vouch-line"></div>
 
-            <div class="vouch-message">
-                <div class="vouch-avatar" style="background:linear-gradient(135deg,#ed4956,#d83a4a);">L</div>
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#22c55e,#16a34a);">Z</div>
                 <div class="vouch-body">
-                    <div class="vouch-header">
-                        <span class="vouch-username">Luna_1337</span>
-                        <span class="vouch-badge pink">Premium</span>
-                        <span class="vouch-timestamp">Today at 3:18 PM</span>
+                    <div class="vouch-head">
+                        <span class="vouch-name">ZeroDay</span>
+                        <span class="vouch-time">Today at 2:55 PM</span>
                     </div>
-                    <div class="vouch-text"><span class="highlight">vouch executor</span> — undetected for 3 months straight. best roblox executor i've ever used. worth every penny</div>
+                    <div class="vouch-text"><span class="hl">thanks for the doxxer</span> — pulled full info on a scammer in seconds. support walked me through everything. absolute W</div>
                 </div>
             </div>
 
-            <div class="vouch-separator"></div>
+            <div class="vouch-line"></div>
 
-            <div class="vouch-message">
-                <div class="vouch-avatar" style="background:linear-gradient(135deg,#22c55e,#16a34a);">Z</div>
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#a855f7,#7c3aed);">R</div>
                 <div class="vouch-body">
-                    <div class="vouch-header">
-                        <span class="vouch-username">ZeroDay</span>
-                        <span class="vouch-badge green">Verified</span>
-                        <span class="vouch-timestamp">Today at 2:55 PM</span>
+                    <div class="vouch-head">
+                        <span class="vouch-name">RazorX</span>
+                        <span class="vouch-tag">Premium</span>
+                        <span class="vouch-time">Today at 1:30 PM</span>
                     </div>
-                    <div class="vouch-text"><span class="highlight">thanks for the doxxer</span> — pulled full info on a scammer in seconds. support walked me through everything. absolute W</div>
+                    <div class="vouch-text"><span class="hl">vouch yoda doxxer</span> — phone, email, address, socials all in one search. support team is super responsive too. join the discord</div>
                 </div>
             </div>
 
-            <div class="vouch-separator"></div>
+            <div class="vouch-line"></div>
 
-            <div class="vouch-message">
-                <div class="vouch-avatar" style="background:linear-gradient(135deg,#eab308,#ca8a04);">N</div>
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">S</div>
                 <div class="vouch-body">
-                    <div class="vouch-header">
-                        <span class="vouch-username">NeonGhost</span>
-                        <span class="vouch-badge gold">OG</span>
-                        <span class="vouch-timestamp">Today at 2:10 PM</span>
+                    <div class="vouch-head">
+                        <span class="vouch-name">ShadowViper</span>
+                        <span class="vouch-time">Today at 12:45 PM</span>
                     </div>
-                    <div class="vouch-text"><span class="highlight">op executor fr</span> — no key, no bullshit, just works. switched from Synapse and never looked back 🐐</div>
+                    <div class="vouch-text"><span class="hl">yoda city is goated</span> — bought both tools. doxxer is insane for osint. this place is my one stop shop now</div>
                 </div>
             </div>
 
-            <div class="vouch-separator"></div>
+            <div class="vouch-line"></div>
 
-            <div class="vouch-message">
-                <div class="vouch-avatar" style="background:linear-gradient(135deg,#a855f7,#7c3aed);">R</div>
-                <div class="vouch-body">
-                    <div class="vouch-header">
-                        <span class="vouch-username">RazorX</span>
-                        <span class="vouch-badge">Premium</span>
-                        <span class="vouch-timestamp">Today at 1:30 PM</span>
-                    </div>
-                    <div class="vouch-text"><span class="highlight">vouch yoda doxxer</span> — phone, email, address, socials all in one search. support team is super responsive too. join the discord</div>
-                </div>
-            </div>
-
-            <div class="vouch-separator"></div>
-
-            <div class="vouch-message">
-                <div class="vouch-avatar" 
+            <div class="vouch">
+                <div class="vouch-
