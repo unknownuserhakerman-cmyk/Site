@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yoda City</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #080810;
+            color: #d0c0e8;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .galaxy {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 30% 20%, rgba(40, 10, 80, 0.3) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(20, 5, 60, 0.2) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(10, 5, 30, 0.5) 0%, transparent 70%);
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .moon {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #f0e6d0, #c8b898 40%, #8a7a6a 70%, #4a3a3a);
+            top: 8%;
+            right: 12%;
+            box-shadow: 0 0 60px rgba(200, 180, 140, 0.15), 0 0 120px rgba(200, 180, 140, 0.05);
+            animation: moon-float 20s ease-in-out infinite alternate;
+        }
+
+        .moon::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(120, 100, 80, 0.3);
+            top: 25px;
+            left: 30px;
+        }
+
+        .moon::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(120, 100, 80, 0.2);
+            top: 60px;
+            left: 55px;
+        }
+
+        @keyframes moon-float {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(15px, 10px); }
+            100% { transform: translate(-10px, 15px); }
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.3);
+            animation: shoot 8s linear infinite;
+            top: 15%;
+            left: 80%;
+        }
+
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(to left, rgba(255,255,255,0.4), transparent);
+            transform: rotate(-35deg);
+            transform-origin: right center;
+        }
+
+        @keyframes shoot {
+            0% { transform: translate(0, 0); opacity: 0; }
+            5% { opacity: 1; }
+            15% { transform: translate(-200px, 140px); opacity: 0; }
+            100% { transform: translate(-200px, 140px); opacity: 0; }
+        }
+
+        .shooting-star:nth-child(2) {
+            top: 60%;
+            left: 20%;
+            animation-delay: 4s;
+            animation-duration: 10s;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 30px;
+            background: rgba(6, 6, 16, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(168, 85, 247, 0.08);
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo .logo {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6d28d9, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: #fff;
+            font-family: 'Arial Black', Arial, sans-serif;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+            flex-shrink: 0;
+        }
+
+        .nav-logo span {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #9a85b8;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #c084fc;
+            background: rgba(168, 85, 247, 0.08);
+        }
+
+        .page {
+            display: none;
+            padding: 85px 16px 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            text-align: center;
+            padding: 25px 0 15px;
+        }
+
+        .hero h1 {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #d8b4fe, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: #9a85b8;
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 28px;
+            background: linear-gradient(135deg, #6d28d9, #a855f7);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(120, 0, 255, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(120, 0, 255, 0.35);
+        }
+
+        .btn-buy {
+            background: linear-gradient(135deg, #059669, #10b981);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-buy:hover {
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.35);
+        }
+
+        .btn-coming {
+            background: rgba(60, 40, 90, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            box-shadow: none;
+            cursor: default;
+            opacity: 0.6;
+        }
+
+        .btn-coming:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .showcase-card {
+            background: linear-gradient(145deg, rgba(20, 12, 40, 0.7), rgba(10, 5, 22, 0.85));
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            padding: 28px 22px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .showcase-card:hover {
+            border-color: rgba(168, 85, 247, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(120, 0, 255, 0.1);
+        }
+
+        .showcase-card .big-icon {
+            font-size: 2.8rem;
+            margin-bottom: 8px;
+        }
+
+        .showcase-card h2 {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.3rem;
+            color: #c084fc;
+        }
+
+        .showcase-card .tagline {
+            color: #9a85b8;
+            font-size: 0.85rem;
+            margin: 4px 0 12px;
+        }
+
+        .showcase-card .feat-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .showcase-card .feat-list span {
+            background: rgba(168, 85, 247, 0.06);
+            border: 1px solid rgba(168, 85, 247, 0.08);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            color: #b8a0d8;
+        }
+
+        .showcase-card .price {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.8rem;
+            color: #d8b4fe;
+            margin: 8px 0;
+        }
+
+        .showcase-card .price small {
+            font-size: 0.7rem;
+            color: #7a6a8a;
+        }
+
+        .showcase-card .pay-methods {
+            font-size: 0.7rem;
+            color: #7a6a8a;
+            margin-bottom: 12px;
+        }
+
+        .product-section {
+            margin-top: 25px;
+        }
+
+        .product-section h2 {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.2rem;
+            color: #c084fc;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .product-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .product-card {
+            flex: 1 1 260px;
+            max-width: 340px;
+            background: linear-gradient(145deg, rgba(20, 12, 40, 0.7), rgba(10, 5, 22, 0.85));
+            border: 1px solid rgba(168, 85, 247, 0.08);
+            border-radius: 14px;
+            padding: 24px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            border-color: rgba(168, 85, 247, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(120, 0, 255, 0.1);
+        }
+
+        .product-card .icon-big {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+
+        .product-card h3 {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.1rem;
+            color: #c084fc;
+        }
+
+        .product-card .p-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #6d28d9, #a855f7);
+            color: #fff;
+            font-size: 0.55rem;
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 6px 0 10px;
+        }
+
+        .product-card .p-badge.soon {
+            background: rgba(60, 40, 90, 0.3);
+            color: #9a85b8;
+            border: 1px solid rgba(168, 85, 247, 0.15);
+        }
+
+        .product-card .prod-price {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 1.5rem;
+            color: #d8b4fe;
+            margin-bottom: 4px;
+        }
+
+        .product-card .prod-price small {
+            font-size: 0.65rem;
+            color: #7a6a8a;
+        }
+
+        .product-card .pay-info {
+            font-size: 0.65rem;
+            color: #6a5a7a;
+            margin-bottom: 10px;
+        }
+
+        .product-card ul {
+            list-style: none;
+            margin: 10px 0 14px;
+            text-align: left;
+        }
+
+        .product-card ul li {
+            color: #b8a0d8;
+            padding: 5px 0;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .product-card ul li::before {
+            content: '✓';
+            color: #a855f7;
+            font-weight: bold;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.12), transparent);
+            margin: 30px 0;
+        }
+
+        .vouch-box {
+            background: rgba(12, 10, 22, 0.5);
+            border: 1px solid rgba(168, 85, 247, 0.06);
+            border-radius: 10px;
+            padding: 6px 0;
+            margin-top: 10px;
+        }
+
+        .vouch {
+            display: flex;
+            padding: 10px 16px;
+            gap: 12px;
+            border-radius: 6px;
+            margin: 2px 6px;
+            transition: background 0.15s ease;
+        }
+
+        .vouch:hover {
+            background: rgba(168, 85, 247, 0.03);
+        }
+
+        .vouch-av {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: #fff;
+            margin-top: 2px;
+        }
+
+        .vouch-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .vouch-head {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 1px;
+        }
+
+        .vouch-name {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #d0c0e8;
+        }
+
+        .vouch-tag {
+            font-size: 0.6rem;
+            background: rgba(168, 85, 247, 0.12);
+            color: #a855f7;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .vouch-time {
+            font-size: 0.6rem;
+            color: #5a4a6a;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        .vouch-text {
+            color: #c0b0d8;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .vouch-text .hl {
+            color: #a855f7;
+            font-weight: 600;
+        }
+
+        .vouch-line {
+            height: 1px;
+            background: rgba(168, 85, 247, 0.04);
+            margin: 2px 16px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #4a3a5a;
+            font-size: 0.75rem;
+            border-top: 1px solid rgba(168, 85, 247, 0.03);
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .navbar { padding: 10px 14px; }
+            .nav-logo span { font-size: 1rem; }
+            .nav-links a { font-size: 0.75rem; padding: 5px 10px; }
+            .hero h1 { font-size: 1.6rem; }
+            .page { padding: 75px 10px 30px; }
+            .vouch-time { display: none; }
+            .moon { width: 80px; height: 80px; top: 5%; right: 8%; }
+            .moon::before { width: 20px; height: 20px; top: 18px; left: 20px; }
+            .moon::after { width: 12px; height: 12px; top: 40px; left: 38px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="galaxy">
+        <div class="stars" id="stars"></div>
+        <div class="moon"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-logo">
+            <div class="logo">Y</div>
+            <span>YODA CITY</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="#vouches">Vouches</a></li>
+        </ul>
+    </nav>
+
+    <!-- ===== HOME ===== -->
+    <div class="page active" id="page-home">
+        <div class="hero">
+            <h1>✦ YODA CITY ✦</h1>
+            <p>Premium intelligence & remote access tools</p>
+        </div>
+
+        <div class="showcase">
+            <div class="showcase-card">
+                <div class="big-icon">🔍</div>
+                <h2>Yoda Doxxer</h2>
+                <p class="tagline">Advanced OSINT platform</p>
+                <div class="feat-list">
+                    <span>📍 IP Lookup</span>
+                    <span>📧 Email Search</span>
+                    <span>📱 Phone Lookup</span>
+                    <span>🏠 Address Finder</span>
+                    <span>🌐 Social Cross-Ref</span>
+                    <span>🕶️ Dark Web Scan</span>
+                </div>
+                <div class="price">$4.99 <small>lifetime</small></div>
+                <div class="pay-methods">▸ Crypto ▸ PayPal</div>
+                <a href="https://discord.com/invite/bZFGVUBvya" target="_blank" class="btn btn-buy">Buy Now</a>
+            </div>
+
+            <div class="showcase-card">
+                <div class="big-icon">🦠</div>
+                <h2>Yoda RAT</h2>
+                <p class="tagline">Advanced remote administration</p>
+                <div class="feat-list">
+                    <span>💻 Remote Shell</span>
+                    <span>📷 Camera Access</span>
+                    <span>🎙️ Microphone</span>
+                    <span>📁 File Manager</span>
+                    <span>🔑 Keylogger</span>
+                    <span>🛡️ Stealth Mode</span>
+                </div>
+                <div class="price">$7.99 <small>lifetime</small></div>
+                <div class="pay-methods">▸ Crypto ▸ PayPal</div>
+                <a href="https://discord.com/invite/bZFGVUBvya" target="_blank" class="btn btn-buy">Buy Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PRODUCTS ===== -->
+    <div class="page" id="page-products">
+        <div class="hero">
+            <h1>📦 PRODUCTS</h1>
+            <p>Free & Premium versions</p>
+        </div>
+
+        <div class="product-section">
+            <h2>🔍 Yoda Doxxer</h2>
+            <div class="product-row">
+                <div class="product-card">
+                    <div class="icon-big">🆓</div>
+                    <h3>Free</h3>
+                    <div class="p-badge soon">COMING SOON</div>
+                    <ul>
+                        <li>Basic IP lookup</li>
+                        <li>Username search (3/day)</li>
+                        <li>Email verification</li>
+                        <li>Community support</li>
+                    </ul>
+                    <button class="btn btn-coming" disabled>Coming Soon</button>
+                </div>
+                <div class="product-card">
+                    <div class="icon-big">💎</div>
+                    <h3>Premium</h3>
+                    <div class="p-badge">Most Popular</div>
+                    <div class="prod-price">$4.99 <small>lifetime</small></div>
+                    <div class="pay-info">Crypto / PayPal</div>
+                    <ul>
+                        <li>Full OSINT suite</li>
+                        <li>Unlimited searches</li>
+                        <li>Phone & address lookup</li>
+                        <li>Social media cross-ref</li>
+                        <li>Dark web scanning</li>
+                        <li>Priority 24/7 support</li>
+                    </ul>
+                    <a href="https://discord.com/invite/bZFGVUBvya" target="_blank" class="btn btn-buy">Buy Now — $4.99</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="product-section">
+            <h2>🦠 Yoda RAT</h2>
+            <div class="product-row">
+                <div class="product-card">
+                    <div class="icon-big">🆓</div>
+                    <h3>Free</h3>
+                    <div class="p-badge soon">COMING SOON</div>
+                    <ul>
+                        <li>Basic remote shell</li>
+                        <li>File browser</li>
+                        <li>Process manager</li>
+                        <li>Basic persistence</li>
+                    </ul>
+                    <button class="btn btn-coming" disabled>Coming Soon</button>
+                </div>
+                <div class="product-card">
+                    <div class="icon-big">💎</div>
+                    <h3>Premium</h3>
+                    <div class="p-badge">Most Popular</div>
+                    <div class="prod-price">$7.99 <small>lifetime</small></div>
+                    <div class="pay-info">Crypto / PayPal</div>
+                    <ul>
+                        <li>Full remote control</li>
+                        <li>Camera & mic access</li>
+                        <li>Keylogger & clipboard</li>
+                        <li>Stealth & persistence</li>
+                        <li>VPN/Proxy aware</li>
+                        <li>Priority 24/7 support</li>
+                    </ul>
+                    <a href="https://discord.com/invite/bZFGVUBvya" target="_blank" class="btn btn-buy">Buy Now — $7.99</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== VOUCHES ===== -->
+    <div class="page" id="page-vouches">
+        <div class="hero">
+            <h1>💬 VOUCHES</h1>
+            <p>What our buyers say</p>
+        </div>
+
+        <div class="vouch-box">
+
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#5865F2,#4752C4);">K</div>
+                <div class="vouch-body">
+                    <div class="vouch-head">
+                        <span class="vouch-name">Kraken</span>
+                        <span class="vouch-tag">Premium</span>
+                        <span class="vouch-time">Today at 3:42 PM</span>
+                    </div>
+                    <div class="vouch-text"><span class="hl">vouch yoda doxxer</span> — $4.99 and it pulled everything. ip, email, socials all in one search. best money i ever spent 🔥</div>
+                </div>
+            </div>
+
+            <div class="vouch-line"></div>
+
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#22c55e,#16a34a);">Z</div>
+                <div class="vouch-body">
+                    <div class="vouch-head">
+                        <span class="vouch-name">ZeroDay</span>
+                        <span class="vouch-time">Today at 2:55 PM</span>
+                    </div>
+                    <div class="vouch-text"><span class="hl">rat is insane</span> — full control for $7.99 lifetime. camera, mic, keylogger all work perfect. support helped me set up in 5 mins</div>
+                </div>
+            </div>
+
+            <div class="vouch-line"></div>
+
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#a855f7,#7c3aed);">R</div>
+                <div class="vouch-body">
+                    <div class="vouch-head">
+                        <span class="vouch-name">RazorX</span>
+                        <span class="vouch-tag">Premium</span>
+                        <span class="vouch-time">Today at 1:30 PM</span>
+                    </div>
+                    <div class="vouch-text"><span class="hl">vouch yoda city</span> — bought both for $12.98. doxxer and rat combo is crazy value. paid with paypal, got my keys in 10 mins</div>
+                </div>
+            </div>
+
+            <div class="vouch-line"></div>
+
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">S</div>
+                <div class="vouch-body">
+                    <div class="vouch-head">
+                        <span class="vouch-name">ShadowViper</span>
+                        <span class="vouch-time">Today at 12:45 PM</span>
+                    </div>
+                    <div class="vouch-text"><span class="hl">doxxer is goated</span> — $4.99 for lifetime? thats a steal. found a scammer's full info in 2 minutes. join the discord and buy</div>
+                </div>
+            </div>
+
+            <div class="vouch-line"></div>
+
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#ec4899,#db2777);">C</div>
+                <div class="vouch-body">
+                    <div class="vouch-head">
+                        <span class="vouch-name">CyberPunk_99</span>
+                        <span class="vouch-tag">Premium</span>
+                        <span class="vouch-time">Today at 11:20 AM</span>
+                    </div>
+                    <div class="vouch-text"><span class="hl">rat is no joke</span> — paid $7.99 with crypto. stealth mode works perfectly, been running for 2 weeks undetected. worth every cent</div>
+                </div>
+            </div>
+
+            <div class="vouch-line"></div>
+
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#eab308,#ca8a04);">N</div>
+                <div class="vouch-body">
+                    <div class="vouch-head">
+                        <span class="vouch-name">NeonGhost</span>
+                        <span class="vouch-time">Today at 10:05 AM</span>
+                    </div>
+                    <div class="vouch-text"><span class="hl">vouch vouch vouch</span> — doxxer pulled phone, email, address all instantly. used paypal and got it straight away. these guys are legit</div>
+                </div>
+            </div>
+
+            <div class="vouch-line"></div>
+
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#f97316,#ea580c);">M</div>
+                <div class="vouch-body">
+                    <div class="vouch-head">
+                        <span class="vouch-name">Mercury</span>
+                        <span class="vouch-tag">Premium</span>
+                        <span class="vouch-time">Today at 9:15 AM</span>
+                    </div>
+                    <div class="vouch-text"><span class="hl">bought the rat yesterday</span> — $7.99 for lifetime is a joke. camera access and keylogger work flawless. support answered in 5 mins. highly recommend</div>
+                </div>
+            </div>
+
+            <div class="vouch-line"></div>
+
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#14b8a6,#0d9488);">V</div>
+                <div class="vouch-body">
+                    <div class="vouch-head">
+                        <span class="vouch-name">Viper_007</span>
+                        <span class="vouch-time">Today at 8:30 AM</span>
+                    </div>
+                    <div class="vouch-text"><span class="hl">both tools bought</span> — $12.98 for doxxer and rat bundle. paid with crypto. doxxer finds everything and rat gives full control. best duo on the market</div>
+                </div>
+            </div>
+
+            <div class="vouch-line"></div>
+
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);">X</div>
+                <div class="vouch-body">
+                    <div class="vouch-head">
+                        <span class="vouch-name">Xenon</span>
+                        <span class="vouch-tag">Premium</span>
+                        <span class="vouch-time">Yesterday at 11:50 PM</span>
+                    </div>
+                    <div class="vouch-text"><span class="hl">doxxer is a beast</span> — $4.99 and i got more info than any other tool i tried. dark web scan found stuff i didnt even know existed. join the discord</div>
+                </div>
+            </div>
+
+            <div class="vouch-line"></div>
+
+            <div class="vouch">
+                <div class="vouch-av" style="background:linear-gradient(135deg,#ef4444,#dc2626);">W</div>
+                <div class="vouch-body">
+                    <div class="vouch-head">
+                        <span class="vouch-name">Wraith</span>
+                        <span class="vouch-time">Yesterday at 10:20 PM</span>
+                    </div>
+                    <div class="vouch-text"><span class="hl">rat is undetected af</span> — paid $7.99 with paypal, got setup in 10 mins. stealth persistence works perfectly. this is the real deal</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>YODA CITY © 2026</p>
+    </footer>
+
+    <script>
+        // ---- Generate stars ----
+        var starsContainer = document.getElementById('stars');
+        for (var i = 0; i < 120; i++) {
+            var star = document.createElement('div');
+            star.className = 'star';
+            var size = Math.random() * 3 + 1;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', (Math.random() * 4 + 2) + 's');
+            star.style.animationDelay = Math.random() * 4 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // ---- Simple page switching ----
+        var pageIds = ['home', 'products', 'vouches'];
+        var currentPage = 'home';
+
+        function showPage(id) {
+            // Hide all pages
+            for (var i = 0; i < pageIds.length; i++) {
+                var pg = document.getElementById('page-' + pageIds[i]);
+                if (pg) pg.classList.remove('active');
+            }
+            // Show target
+            var target = document.getElementById('page-' + id);
+            if (target) target.classList.add('active');
+            
+            // Update nav
+            var links = document.querySelectorAll('.nav-links a');
+            for (var j = 0; j < links.length; j++) {
+                links[j].classList.remove('active');
+                if (links[j].getAttribute('href') === '#' + id) {
+                    links[j].classList.add('active');
+                }
+            }
+            
+            currentPage = id;
+            window.scrollTo(0, 0);
+        }
+
+        // Handle nav clicks
+        var navLinks = document.querySelectorAll('.nav-links a');
+        for (var k = 0; k < navLinks.length; k++) {
+            navLinks[k].onclick = function(e) {
+                e.preventDefault();
+                var id = this.getAttribute('href').substring(1);
+                showPage(id);
+                window.location.hash = id;
+            };
+        }
+
+        // Handle hash changes
+        window.onhashchange = function() {
+            var id = window.location.hash.replace('#', '') || 'home';
+            showPage(id);
+        };
+
+        // Load initial page from hash
+        var startId = window.location.hash.replace('#', '') || 'home';
+        showPage(startId);
+    </script>
+
+</body>
+</html>
